@@ -19,6 +19,7 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'ZZBase'
 ```
+![Image text](https://github.com/CZ410/ZZScrollView/blob/main/Images/data.png)
 
 ## Author
 
