@@ -1,6 +1,6 @@
 # ZZBase
 
-[![CI Status](https://img.shields.io/travis/czz_8023/ZZBase.svg?style=flat)](https://travis-ci.org/czz_8023/ZZBase)
+[![CI Status](https://img.shields.io/travis/CZ410/ZZBase.svg?style=flat)](https://travis-ci.org/CZ410/ZZBase)
 [![Version](https://img.shields.io/cocoapods/v/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
 [![License](https://img.shields.io/cocoapods/l/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
 [![Platform](https://img.shields.io/cocoapods/p/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
@@ -22,7 +22,7 @@ pod 'ZZBase'
 
 ## Author
 
-czz_8023, 1039776732@qq.com
+CzzBoom, 1039776732@qq.com
 
 ## License
 
