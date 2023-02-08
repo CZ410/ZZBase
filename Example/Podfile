@@ -1,9 +1,9 @@
 use_frameworks!
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'ZZBase_Example' do
-  pod 'ZZBase', :path => '../'
+  pod 'ZZBase', :path => '../ZZBase.podspec'
 
   target 'ZZBase_Tests' do
     inherit! :search_paths

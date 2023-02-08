@@ -1,5 +1,5 @@
 import XCTest
-import ZZBase
+//import ZZBase
 
 class Tests: XCTestCase {
     
