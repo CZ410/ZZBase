@@ -7,12 +7,18 @@
 //
 
 import UIKit
+import ZZBase
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.view
+            .zz_backgroundColor(.red)
+            .zz_alpha(0.5)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
