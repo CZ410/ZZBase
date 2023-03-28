@@ -8,7 +8,7 @@
 
 ![Image text](https://github.com/CZ410/ZZBase/blob/main/Images/data.png)
 
-[![基于ZZBase的一些自定义组件ZZCustomControl](https://github.com/CZ410/ZZCustomControl)]
+[基于ZZBase的一些自定义组件ZZCustomControl](https://github.com/CZ410/ZZCustomControl)
 
 ## Example
 
