@@ -297,7 +297,7 @@ public extension UIView{
     }
     
     @discardableResult func zz_border(width: CGFloat = 0.5, color: UIColor = UIColor.gray, radius: CGFloat? = nil) -> Self {
-        self.zz_backgroundColor(color)
+        self.zz_borderColor(color)
             .zz_borderWidth(width)
         guard let radius = radius else { return self}
         self.zz_cornerRadius(radius)
