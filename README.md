@@ -4,6 +4,9 @@
 [![Version](https://img.shields.io/cocoapods/v/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
 [![License](https://img.shields.io/cocoapods/l/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
 [![Platform](https://img.shields.io/cocoapods/p/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
+
+ZZBase是一个封装了开发中常用功能的基础工具库。支持iOS11及以上版本。
+
 ## Foundation
 
 **Array**
