@@ -70,11 +70,13 @@ public let zz_tabBarHeight: CGFloat = 49.0 + zz_safeAreaHeight
 
 //MARK: - 文件路径
 /// bundle
+@available(iOS, deprecated, renamed:"ZZFile.filePath(for:filename:)")
 public func zz_file_bundle(_ name: String,type: String) -> String? {
     return Bundle.main.path(forResource: name, ofType: type)
 }
 
 /// documents filename
+@available(iOS, deprecated, renamed:"ZZFile.filePath(for:filename:)")
 public func zz_file_documents(_ filename: String = "") -> String {
     var file_path = NSHomeDirectory() + "/Documents"
     if filename.count > 0 { file_path.append("/") }

@@ -104,7 +104,7 @@ public extension UIColor{
     /// 修改颜色的透明度
     static func zz_alpha(_ color: UIColor, alpha: CGFloat) -> UIColor{
         let rgb = color.zz_rgba()
-        return UIColor(red: rgb.r, green: rgb.g, blue: rgb.b, alpha: rgb.a)
+        return UIColor(red: rgb.r, green: rgb.g, blue: rgb.b, alpha: alpha)
     }
     
     /// 过渡颜色到指定颜色

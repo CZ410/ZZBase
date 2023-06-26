@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		699FCCBF227CFAFA082B739B /* Pods_ZZBase_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D311101DBF452F5050FD132E /* Pods_ZZBase_Example.framework */; };
+		9DEFC0292A496940005E7F68 /* testImgage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DEFC0282A496940005E7F68 /* testImgage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		98DBC76E88BB52D3B91ED15B /* Pods_ZZBase_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZZBase_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B1BB2ABE5D6F1224731B73F /* Pods-ZZBase_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZZBase_Tests.release.xcconfig"; path = "Target Support Files/Pods-ZZBase_Tests/Pods-ZZBase_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		9DEFC0282A496940005E7F68 /* testImgage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testImgage.png; sourceTree = "<group>"; };
 		AAB5A3644737AF22D6D42351 /* Pods-ZZBase_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZZBase_Example.debug.xcconfig"; path = "Target Support Files/Pods-ZZBase_Example/Pods-ZZBase_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BE90C38D89CDF90920AE271A /* Pods-ZZBase_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZZBase_Example.release.xcconfig"; path = "Target Support Files/Pods-ZZBase_Example/Pods-ZZBase_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D311101DBF452F5050FD132E /* Pods_ZZBase_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZZBase_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +97,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				9DEFC0282A496940005E7F68 /* testImgage.png */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -189,7 +192,6 @@
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				1E17BFDEA2D6B7C8E4DAF585 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -250,6 +252,7 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				9DEFC0292A496940005E7F68 /* testImgage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,23 +266,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1E17BFDEA2D6B7C8E4DAF585 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ZZBase_Tests/Pods-ZZBase_Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ZZBase_Tests/Pods-ZZBase_Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZZBase_Tests/Pods-ZZBase_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4560E6FBFCF0AF1AAC7DC026 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
