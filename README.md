@@ -6,6 +6,9 @@
 [![Platform](https://img.shields.io/cocoapods/p/ZZBase.svg?style=flat)](https://cocoapods.org/pods/ZZBase)
 
 ZZBase是一个封装了开发中常用功能的基础工具库。支持iOS11及以上版本。
+![Image text](https://github.com/CZ410/ZZBase/blob/main/Images/data.png)
+
+[基于ZZBase的一些自定义组件ZZCustomControl](https://github.com/CZ410/ZZCustomControl)
 
 ## Foundation
 
@@ -906,9 +909,115 @@ ZZBase是一个封装了开发中常用功能的基础工具库。支持iOS11及
     static func - (left: UIEdgeInsets, right: UIEdgeInsets) -> UIEdgeInsets
     
 ```
-![Image text](https://github.com/CZ410/ZZBase/blob/main/Images/data.png)
 
-[基于ZZBase的一些自定义组件ZZCustomControl](https://github.com/CZ410/ZZCustomControl)
+## File
+
+```
+    public struct Directory: Equatable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+        
+        public static let documents = Directory(rawValue: "/Documents")
+        public static let library = Directory(rawValue: "/Library")
+        public static let caches = Directory(rawValue: "/Library/Caches")
+        public static let temp = Directory(rawValue: "/tmp")
+        public static let bundle = Directory(rawValue: "/bundle")
+    }
+    
+    /// 获取文件夹路径
+    /// - Parameter directory: 文件夹类型(当bundle时 为空)
+    /// - Returns: 文件夹路径
+    @discardableResult
+    public static func path(for directory: Directory, intermediates: String = "") -> String
+    
+    /// 获取文件路径
+    /// - Parameters:
+    ///   - directory: 文件夹类型
+    ///   - intermediates: 中间路径
+    ///   - filename: 文件名（带后缀；如：xxx.png）
+    /// - Returns: 文件路径
+    @discardableResult
+    public static func filePath(for directory: Directory, intermediates: String = "", filename: String) -> String
+
+    /// 创建文件
+    /// - Parameters:
+    ///   - directory: 文件主路径
+    ///   - folderName: 文件路径
+    ///   - intermediates: 是否创建中间目录
+    ///   - attributes: 属性
+    /// - Returns: 是否创建成功
+    static func create(directory: Directory, folderName: String, intermediates: Bool = true, attributes: [FileAttributeKey: Any]? = nil) -> Bool
+    
+    /// 写入文件
+    /// - Parameters:
+    ///   - filePath: 文件路径
+    ///   - content: 内容
+    ///   - options: 默认先创建一个临时文件，直到文件内容写入成功再导入到目标文件里。 如果为NO，则直接写入目标文件里。
+    /// - Returns: 是否成功
+    static func write(to filePath: String, content: Data, options: Data.WritingOptions = []) -> Bool
+
+    /// 读取文件内容
+    /// - Parameter filePath: 文件路径
+    /// - Returns: 内容 Data
+    static func read(_ filePath: String) -> Data? 
+
+    /// 删除文件
+    /// - Parameter filePath: 文件路径
+    /// - Returns: 是否删除成功
+    static func delete(_ filePath: String) -> Bool
+
+    /// 重命名文件
+    /// - Parameters:
+    ///   - fromPath: 文件原始路径
+    ///   - toPath: 文件新路径
+    /// - Returns: 是否重命名文件成功
+    static func rename(from fromPath: String, to toPath: String) -> Bool
+
+    /// 移动文件
+    /// - Parameters:
+    ///   - fromPath: 文件原始路径
+    ///   - toPath: 文件新路径
+    /// - Returns: 是否移动文件成功
+    static func move(from fromPath: String, to toPath: String) -> Bool
+
+    /// 拷贝文件
+    /// - Parameters:
+    ///   - fromPath: 文件原始路径
+    ///   - toPath: 文件新路径
+    /// - Returns: 是否拷贝文件成功
+    static func copy(from fromPath: String, to toPath: String) -> Bool
+
+    /// 文件是否可写
+    /// - Parameter path: 文件路径
+    /// - Returns: 是否可写
+    static func isWritable(at path: String) -> Bool
+
+    /// 文件是否可读
+    /// - Parameter path: 文件路径
+    /// - Returns: 是否可读
+    static func isReadable(at path: String) -> Bool
+
+    /// 文件是否存在
+    /// - Parameter path: 文件路径
+    /// - Returns: 是否存在
+    static func exists(path: String) -> Bool {
+        return FileManager.default.fileExists(atPath: path)
+    }
+    
+    /// 文件是否存在
+    /// - Parameter url: 文件路径
+    /// - Returns: 是否存在
+    static func exists(url: URL) -> Bool
+    
+    /// 获取文件列表
+    /// - Parameter folderPath: 文件夹路径
+    /// - Returns: 文件列表
+    static func filePathList(folderPath: String) -> [String]
+
+```
 
 ## Example
 
