@@ -72,6 +72,14 @@ public extension CGRect{
         zz_height = value
         return self
     }
+
+    static func zz_all(_ v: CGFloat) -> CGRect{
+        return CGRect(x: v, y: v, width: v, height: v)
+    }
+
+    static func zz_only(x: CGFloat = 0, y: CGFloat = 0, width: CGFloat = 0, height: CGFloat = 0)  -> CGRect{
+        return CGRect(x: x, y: y, width: width, height: height)
+    }
 }
 
 public extension CGRect{

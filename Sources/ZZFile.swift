@@ -27,10 +27,7 @@ public struct ZZFile {
     /// - Returns: 文件夹路径
     @discardableResult
     public static func path(for directory: Directory, intermediates: String = "") -> String{
-        if directory == .bundle{
-            return Bundle.main.path(forResource: nil, ofType: nil, inDirectory: nil) ?? ""
-        }
-        return  NSHomeDirectory().appending(directory.rawValue).appending(intermediates)
+        return filePath(for: directory, intermediates: intermediates, filename: "")
     }
     
     /// 获取文件路径
@@ -44,7 +41,7 @@ public struct ZZFile {
         if directory == .bundle {
             return Bundle.main.path(forResource: filename, ofType: nil) ?? ""
         }
-        var dir = path(for: directory).appending(intermediates)
+        var dir = NSHomeDirectory().appending(directory.rawValue).appending(intermediates)
         if dir.zz_last != "/"{ dir.append("/") }
         dir.append(filename)
         return dir
@@ -55,15 +52,30 @@ public struct ZZFile {
 /// MARK: - 文件操作
 public extension ZZFile{
 
-    /// 创建文件
+    /// 创建文件夹。 如果文件路径已经存在，就不在创建 直接返回True
     /// - Parameters:
-    ///   - directory: 文件主路径
-    ///   - folderName: 文件路径
+    ///   - directory: 文件夹主路径
+    ///   - folderName: 文件夹名
     ///   - intermediates: 是否创建中间目录
     ///   - attributes: 属性
+    ///   - isDirectory: 判断路径是否为目录 ObjCBool
     /// - Returns: 是否创建成功
-    static func create(directory: Directory, folderName: String, intermediates: Bool = true, attributes: [FileAttributeKey: Any]? = nil) -> Bool {
+    static func create(directory: Directory, folderName: String, intermediates: Bool = true, attributes: [FileAttributeKey: Any]? = nil, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool {
         let filePath = path(for: directory).appending("/\(folderName)")
+        return createDirectory(to: filePath, intermediates: intermediates, attributes: attributes, isDirectory: isDirectory)
+    }
+    
+    /// 创建文件夹。 如果文件路径已经存在，就不在创建 直接返回True
+    /// - Parameters:
+    ///   - filePath: 文件夹路径
+    ///   - intermediates: 是否创建中间目录
+    ///   - attributes: 属性
+    ///   - isDirectory: 判断路径是否为目录 ObjCBool
+    /// - Returns: 是否创建成功
+    static func createDirectory(to filePath: String, intermediates: Bool = true, attributes: [FileAttributeKey: Any]? = nil, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool{
+        let isExists = self.exists(path: filePath, isDirectory: isDirectory)
+        /// 如果文件路径已经存在，就不在创建 直接返回
+        if isExists { return true }
         let  fileManager = FileManager.default
         do {
             try fileManager.createDirectory(atPath: filePath, withIntermediateDirectories: intermediates, attributes: attributes)
@@ -73,6 +85,34 @@ public extension ZZFile{
         }
     }
     
+    /// 创建一个文件，并自动创建文件夹路径。
+    /// - 如果文件存在则更新，若文件不存在进行创建并写入。
+    /// - Parameters:
+    ///   - filePath: 文件路径
+    ///   - contents: 文件内容
+    ///   - isUpdataData:  是否更新文件内容，默认：true（如果文件存在则更新，若文件不存在进行创建并写入，更新文件内容失败返回False）
+    ///   - attributes: 文件属性
+    /// - Returns: 是否创建成功
+    static func createFile(to filePath: String, contents: Data? = nil, isUpdataData: Bool = true, attributes: [FileAttributeKey: Any]? = nil) -> Bool{
+        let isExists = self.exists(path: filePath)
+        /// 如果文件路径已经存在，就不在创建 直接返回
+        if isExists {
+            if let data = contents, isUpdataData {
+               return write(to: filePath, content: data)
+            }
+            return true
+        }
+        guard let fileName = filePath.components(separatedBy: "/").last else {
+            return false
+        }
+        let directory = filePath.replacingOccurrences(of: fileName, with: "")
+        guard createDirectory(to: directory) else {
+            return false
+        }
+        let fileManager = FileManager.default
+        return fileManager.createFile(atPath: filePath, contents: contents, attributes: attributes)
+    }
+
     /// 写入文件
     /// - Parameters:
     ///   - filePath: 文件路径
@@ -80,8 +120,9 @@ public extension ZZFile{
     ///   - options: 默认先创建一个临时文件，直到文件内容写入成功再导入到目标文件里。 如果为NO，则直接写入目标文件里。
     /// - Returns: 是否成功
     static func write(to filePath: String, content: Data, options: Data.WritingOptions = []) -> Bool {
+        let url = URL(fileURLWithPath: filePath)
         do {
-            try content.write(to: URL(string: filePath)!, options: options)
+            try content.write(to: url, options: options)
             return true
         } catch {
             return false
@@ -163,24 +204,26 @@ public extension ZZFile{
         return FileManager.default.isReadableFile(atPath: path)
     }
 
-    /// 文件是否存在
+    /// 文件/文件夹 是否存在
     /// - Parameter path: 文件路径
+    /// - Parameter isDirectory: 该是为nil时候调用FileManager.default.fileExists(atPath: path)，否则调用FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
     /// - Returns: 是否存在
-    static func exists(path: String) -> Bool {
-        return FileManager.default.fileExists(atPath: path)
+    static func exists(path: String, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool {
+        return isDirectory == nil ? FileManager.default.fileExists(atPath: path) : FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
     }
     
     /// 文件是否存在
     /// - Parameter url: 文件路径
+    /// - Parameter isDirectory: 该是为nil时候调用FileManager.default.fileExists(atPath: path)，否则调用FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
     /// - Returns: 是否存在
-    static func exists(url: URL) -> Bool{
+    static func exists(url: URL, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool{
         var path: String = ""
         if #available(iOS 16.0, *) {
             path = url.path()
         } else {
             path = url.path
         }
-        return exists(path: path)
+        return exists(path: path, isDirectory: isDirectory)
     }
     
     /// 获取文件列表

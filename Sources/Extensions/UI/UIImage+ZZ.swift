@@ -26,7 +26,12 @@ public extension UIImage{
     static func zz_named(_ name:String) -> UIImage?{
         return UIImage(named: name)
     }
-    
+
+    var base64: String?{
+        let data = self.pngData()
+        return data?.base64EncodedString()
+    }
+
     /// base64转图片
     static func zz_base64(_ base64:String) -> UIImage?{
         guard let imageData = Data.init(base64Encoded: base64, options: Data.Base64DecodingOptions.ignoreUnknownCharacters) else { return nil }

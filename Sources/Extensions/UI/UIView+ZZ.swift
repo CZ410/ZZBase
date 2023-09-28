@@ -295,7 +295,27 @@ public extension UIView{
         zz_isHidden = enable
         return self
     }
+
+    var zz_contentMode: ContentMode{
+        get {
+            return self.contentMode
+        }
+        set {
+            self.contentMode = newValue
+        }
+    }
+
+    @discardableResult func zz_contentMode(_ contentMode: ContentMode) -> Self{
+        zz_contentMode = contentMode
+        return self
+    }
     
+    /// 边框
+    /// - Parameters:
+    ///   - width: 边框宽度
+    ///   - color: 边框颜色
+    ///   - radius: 边框圆角大小
+    /// - Returns: 本身
     @discardableResult func zz_border(width: CGFloat = 0.5, color: UIColor = UIColor.gray, radius: CGFloat? = nil) -> Self {
         self.zz_borderColor(color)
             .zz_borderWidth(width)
@@ -304,6 +324,30 @@ public extension UIView{
         return self
     }
     
+    /// 虚线边框
+    /// - Parameters:
+    ///   - corners: 边框圆角位置
+    ///   - radii: 圆角大小
+    ///   - width: 边框宽度 默认0.5
+    ///   - lineDashPattern: 虚线模式 默认[2, 1]
+    ///   - color: 虚线颜色
+    /// - Returns: 本身
+    @discardableResult func zz_dottedBorder(corners: UIRectCorner,
+                                            radii: CGFloat,
+                                            width: CGFloat = 0.5,
+                                            color: UIColor = UIColor.gray,
+                                            lineDashPattern: [NSNumber]? = [2, 1]) -> Self{
+        self.zz_round(corners, radii: radii)
+        guard let roundLayer = self.roundCornerLayer else { return self }
+        roundLayer.strokeColor = color.cgColor
+        roundLayer.fillColor = UIColor.clear.cgColor
+        roundLayer.lineWidth = width
+        roundLayer.lineDashPattern = lineDashPattern
+        self.layer.mask = nil
+        self.layer.insertSublayer(roundLayer, at: 0)
+        return self
+    }
+
     @discardableResult func zz_addSubView(_ view: UIView) -> Self {
         addSubview(view)
         return self
@@ -501,24 +545,26 @@ public extension UIView{
         if self.gradientLayer == nil {
             self.gradientLayer = CAGradientLayer()
             self.gradientLayer?.frame = self.bounds
-            self.gradientLayer?.locations = locations
-            self.gradientLayer?.colors = colors
-            self.gradientLayer?.startPoint = startPoint
-            self.gradientLayer?.endPoint = endPoint
-            self.layer.insertSublayer(self.gradientLayer!, at: 0)
-        }
-        
-        self.zz_addObservers(["frame","bounds"], key: "gradientLayer") {[weak self] value in
-            guard let `self` = self else { return }
-            switch value.keyPath {
-                case "frame","bounds":
-                    if let gradientLayer = self.gradientLayer{
-                        gradientLayer.frame = self.bounds
-                    }
-                    break
-                default: break
+
+            self.zz_addObservers(["frame","bounds"], key: "gradientLayer") {[weak self] value in
+                guard let `self` = self else { return }
+                switch value.keyPath {
+                    case "frame","bounds":
+                        if let gradientLayer = self.gradientLayer{
+                            gradientLayer.frame = self.bounds
+                        }
+                        break
+                    default: break
+                }
             }
+
         }
+        self.gradientLayer?.locations = locations
+        self.gradientLayer?.colors = colors
+        self.gradientLayer?.startPoint = startPoint
+        self.gradientLayer?.endPoint = endPoint
+        self.layer.insertSublayer(self.gradientLayer!, at: 0)
+
         return self.gradientLayer!
     }
 
@@ -532,6 +578,68 @@ public extension UIView{
     ///   - locations: 渐变不同颜色位置 对应颜色组 0～1之间
     @discardableResult func zz_addGradient(form fColor: UIColor,to toColor: UIColor,start startPoint: CGPoint = CGPoint(x: 0, y: 0.5), end endPoint:CGPoint = CGPoint(x: 1, y: 0.5), locations: [NSNumber] = [0, 1]) -> CAGradientLayer{
         return zz_addGradient(colors: [fColor.cgColor,toColor.cgColor],start: startPoint, end: endPoint, locations: locations)
+    }
+}
+
+//MARK: - 阴影
+public extension UIView{
+    private(set) var zz_shadowBgLayer: CAShapeLayer?{
+        set{
+            zz_objc_set(key: "zz_shadowBgLayer", newValue)
+        }
+        get{
+            return zz_objc_get(key: "zz_shadowBgLayer", CAShapeLayer.self)
+        }
+    }
+
+    @discardableResult func zz_shadow(color: UIColor = .gray,
+                                      opacity: Float = 1,
+                                      radius: CGFloat = 0,
+                                      offset: CGSize = .zero,
+                                      inset: UIEdgeInsets = .zero,
+                                      corners: UIRectCorner = .allCorners,
+                                      bgColor: UIColor? = nil) -> Self{
+        if zz_shadowBgLayer == nil {
+            zz_shadowBgLayer = CAShapeLayer()
+            zz_shadowBgLayer?.backgroundColor = UIColor.clear.cgColor
+            zz_shadowBgLayer?.strokeColor = UIColor.clear.cgColor
+        }
+        zz_shadowBgLayer?.fillColor = bgColor?.cgColor
+
+        if let bgLayer = zz_shadowBgLayer {
+            self.layer.insertSublayer(bgLayer, at: 0)
+        }
+
+        func reloadShadow(){
+            var frame = self.bounds
+            frame.zz_x += inset.left
+            frame.zz_y += inset.top
+            frame.zz_width -= (inset.left + inset.right)
+            frame.zz_height -= (inset.top + inset.bottom)
+            let p = UIBezierPath(roundedRect: frame, byRoundingCorners: corners, cornerRadii: CGSize(radius))
+            self.layer.shadowPath = p.cgPath
+
+            let bgP = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(radius))
+            self.zz_shadowBgLayer?.path = bgP.cgPath
+        }
+
+        reloadShadow()
+
+        var targets = self.zz_observerTargets["frame"]
+        let targets2 = self.zz_observerTargets["bounds"]
+        targets?.remoBlock(for: "zz_shadow_BgLayer")
+        targets2?.remoBlock(for: "zz_shadow_BgLayer")
+
+        self.zz_addObservers(["frame", "bounds"], key: "zz_shadow_BgLayer") { [weak self] value in
+            guard let `self` = self, self.zz_width > 0, self.zz_height > 0 else { return }
+            reloadShadow()
+        }
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOpacity = opacity
+//        self.layer.cornerRadius = radius
+        self.layer.shadowOffset = offset
+
+        return self
     }
 }
 
@@ -589,22 +697,23 @@ public extension UIView{
             self.roundCornerLayer = CAShapeLayer()
             self.roundCornerLayer?.frame = self.bounds
             self.roundCornerLayer?.path = maskPath.cgPath
+
+            self.zz_addObservers(["frame","bounds"] ,key: "roundCornerLayer") { [weak self] value in
+                guard let `self` = self, let roundLayer = self.roundCornerLayer else { return }
+                switch value.keyPath {
+                    case "frame","bounds":
+                        let maskPath = UIBezierPath(roundedRect: self.bounds,
+                                                    byRoundingCorners: self.corners,
+                                                    cornerRadii: CGSize(width: self.radii, height: self.radii))
+                        roundLayer.frame = self.bounds
+                        roundLayer.path = maskPath.cgPath
+                        break
+                    default: break
+                }
+            }
         }
         
         self.layer.mask = self.roundCornerLayer
-        self.zz_addObservers(["frame","bounds"] ,key: "roundCornerLayer") { [weak self] value in
-            guard let `self` = self, let roundLayer = self.roundCornerLayer else { return }
-            switch value.keyPath {
-                case "frame","bounds":
-                    let maskPath = UIBezierPath(roundedRect: self.bounds,
-                                                byRoundingCorners: self.corners,
-                                                cornerRadii: CGSize(width: self.radii, height: self.radii))
-                    roundLayer.frame = self.bounds
-                    roundLayer.path = maskPath.cgPath
-                    break
-                default: break
-            }
-        }
         return self
     }
 }

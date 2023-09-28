@@ -100,3 +100,30 @@ public extension UIControl{
     }
 
 }
+
+//MARK: - 扩大/缩小事件触发范围
+extension UIControl{
+    /// 扩大/缩小事件触发范围
+    public var zz_hitEdgeInset: UIEdgeInsets{
+        get{
+            return zz_objc_get(key: "zz_hitEdgeInset", UIEdgeInsets.self) ?? .zero
+        }
+        set{
+            zz_objc_set(key: "zz_hitEdgeInset", newValue)
+        }
+    }
+
+    /// 扩大/缩小事件触发范围
+    @discardableResult public func zz_hitEdgeInset(_ v: UIEdgeInsets) -> Self{
+        zz_hitEdgeInset = v
+        return self
+    }
+
+   open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard zz_hitEdgeInset != .zero else {
+            return super.point(inside: point, with: event)
+        }
+        let hitFrame = self.bounds.inset(by: zz_hitEdgeInset)
+        return hitFrame.contains(point)
+    }
+}

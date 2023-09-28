@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZZBase'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'Rich extensions to the base classes, point syntax for some UI components.'
 
 # This description is used to generate tags and improve search results.

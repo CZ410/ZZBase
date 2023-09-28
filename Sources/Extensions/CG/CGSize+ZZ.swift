@@ -43,7 +43,15 @@ public extension CGSize{
             self.height = newValue
         }
     }
-    
+
+    static func zz_all(_ v: CGFloat) -> CGSize{
+        return CGSize(width: v, height: v)
+    }
+
+    static func zz_only(width: CGFloat = 0, height: CGFloat = 0)  -> CGSize{
+        return CGSize(width: width, height: height)
+    }
+
     @discardableResult mutating func zz_height(_ value: CGFloat) -> Self{
         zz_height = value
         return self

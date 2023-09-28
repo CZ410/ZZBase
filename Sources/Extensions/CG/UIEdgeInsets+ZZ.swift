@@ -73,6 +73,14 @@ public extension UIEdgeInsets{
         zz_right = value
         return self
     }
+
+    static func zz_all(_ v: CGFloat) -> UIEdgeInsets{
+        return UIEdgeInsets(top: v, left: v, bottom: v, right: v)
+    }
+
+    static func zz_only(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0)  -> UIEdgeInsets{
+        return UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+    }
 }
 
 public extension UIEdgeInsets{

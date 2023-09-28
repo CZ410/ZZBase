@@ -49,6 +49,13 @@ public extension CGPoint{
         return self
     }
     
+    static func zz_all(_ v: CGFloat) -> CGPoint{
+        return CGPoint(x: v, y: v)
+    }
+
+    static func zz_only(x: CGFloat = 0, y: CGFloat = 0)  -> CGPoint{
+        return CGPoint(x: x, y: y)
+    }
 
     static func += (left:inout CGPoint, right: CGPoint){
         left.x += right.x
