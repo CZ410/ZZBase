@@ -30,11 +30,6 @@ public extension CALayer{
         }
     }
     
-    @discardableResult func zz_x(_ value: CGFloat) -> Self{
-        zz_x = value
-        return self
-    }
-    
     var zz_y : CGFloat {
         get {
             return self.frame.origin.y
@@ -44,11 +39,6 @@ public extension CALayer{
             selfFrame.origin.y = CGFloat(newValue)
             self.frame = selfFrame
         }
-    }
-    
-    @discardableResult func zz_y(_ value: CGFloat) -> Self{
-        zz_y = value
-        return self
     }
     
     var zz_width : CGFloat {
@@ -62,11 +52,6 @@ public extension CALayer{
         }
     }
     
-    @discardableResult func zz_width(_ value: CGFloat) -> Self{
-        zz_width = value
-        return self
-    }
-    
     var zz_height: CGFloat {
         get {
             return self.frame.size.height
@@ -76,11 +61,6 @@ public extension CALayer{
             selfFrame.size.height = CGFloat(newValue)
             self.frame = selfFrame
         }
-    }
-    
-    @discardableResult func zz_height(_ value: CGFloat) -> Self{
-        zz_height = value
-        return self
     }
     
     var zz_maxX: CGFloat {
@@ -106,11 +86,6 @@ public extension CALayer{
         }
     }
     
-    @discardableResult func zz_size(_ value: CGSize) -> Self{
-        zz_size = value
-        return self
-    }
-    
     var zz_origin : CGPoint {
         get {
             return self.frame.origin
@@ -120,11 +95,6 @@ public extension CALayer{
             selfFrame.origin = newValue
             self.frame = selfFrame
         }
-    }
-    
-    @discardableResult func zz_origin(_ value: CGPoint) -> Self{
-        zz_origin = value
-        return self
     }
     
     var zz_center: CGPoint{
@@ -140,11 +110,6 @@ public extension CALayer{
         }
     }
     
-    @discardableResult func zz_center(_ value: CGPoint) -> Self{
-        zz_center = value
-        return self
-    }
-    
     var zz_centerX: CGFloat {
         get {
             return zz_center.x
@@ -154,11 +119,6 @@ public extension CALayer{
             center.x = newValue
             zz_center = center
         }
-    }
-    
-    @discardableResult func zz_centerX(_ value: CGFloat) -> Self{
-        zz_centerX = value
-        return self
     }
     
     var zz_centerY: CGFloat {
@@ -171,12 +131,7 @@ public extension CALayer{
             zz_center = center
         }
     }
-    
-    @discardableResult func zz_centerY(_ value: CGFloat) -> Self{
-        zz_centerY = value
-        return self
-    }
-    
+
     var zz_frame: CGRect {
         get {
             return self.frame
@@ -185,9 +140,543 @@ public extension CALayer{
             self.frame = newValue
         }
     }
-    
+
+    var zz_bounds: CGRect {
+        get {
+            return self.bounds
+        }
+        set {
+            self.bounds = newValue
+        }
+    }
+}
+
+public extension CALayer{
+
+    @discardableResult func zz_x(_ value: CGFloat) -> Self{
+        zz_x = value
+        return self
+    }
+
+    @discardableResult func zz_y(_ value: CGFloat) -> Self{
+        zz_y = value
+        return self
+    }
+
+    @discardableResult func zz_width(_ value: CGFloat) -> Self{
+        zz_width = value
+        return self
+    }
+
+    @discardableResult func zz_height(_ value: CGFloat) -> Self{
+        zz_height = value
+        return self
+    }
+
+    @discardableResult func zz_size(_ value: CGSize) -> Self{
+        zz_size = value
+        return self
+    }
+
+    @discardableResult func zz_origin(_ value: CGPoint) -> Self{
+        zz_origin = value
+        return self
+    }
+
+    @discardableResult func zz_center(_ value: CGPoint) -> Self{
+        zz_center = value
+        return self
+    }
+
+    @discardableResult func zz_centerX(_ value: CGFloat) -> Self{
+        zz_centerX = value
+        return self
+    }
+
+    @discardableResult func zz_centerY(_ value: CGFloat) -> Self{
+        zz_centerY = value
+        return self
+    }
+
     @discardableResult func zz_frame(_ value: CGRect) -> Self{
         zz_frame = value
+        return self
+    }
+
+    @discardableResult func zz_bounds(_ value: CGRect) -> Self{
+        zz_bounds = value
+        return self
+    }
+}
+
+//MARK: - 常用属性
+
+public extension CALayer{
+    var zz_position: CGPoint {
+        get { return self.position  }
+        set { self.position = newValue }
+    }
+
+    var zz_zPosition: CGFloat {
+        get { return self.zPosition  }
+        set { self.zPosition = newValue }
+    }
+
+    var zz_anchorPoint: CGPoint {
+        get { return self.anchorPoint  }
+        set { self.anchorPoint = newValue }
+    }
+
+    var zz_anchorPointZ: CGFloat {
+        get { return self.anchorPointZ  }
+        set { self.anchorPointZ = newValue }
+    }
+
+    var zz_transform: CATransform3D {
+        get { return self.transform  }
+        set { self.transform = newValue }
+    }
+
+    var zz_isHidden: Bool {
+        get { return self.isHidden  }
+        set { self.isHidden = newValue }
+    }
+
+    var zz_isDoubleSided: Bool {
+        get { return self.isDoubleSided  }
+        set { self.isDoubleSided = newValue }
+    }
+
+    var zz_isGeometryFlipped: Bool {
+        get { return self.isGeometryFlipped  }
+        set { self.isGeometryFlipped = newValue }
+    }
+
+    var zz_sublayerTransform: CATransform3D {
+        get { return self.sublayerTransform  }
+        set { self.sublayerTransform = newValue }
+    }
+
+    var zz_mask: CALayer? {
+        get { return self.mask  }
+        set { self.mask = newValue }
+    }
+
+    var zz_masksToBounds: Bool {
+        get { return self.masksToBounds  }
+        set { self.masksToBounds = newValue }
+    }
+
+    var zz_contents: Any? {
+        get { return self.contents  }
+        set { self.contents = newValue }
+    }
+
+    var zz_contentsRect: CGRect {
+        get { return self.contentsRect  }
+        set { self.contentsRect = newValue }
+    }
+
+    var zz_contentsGravity: CALayerContentsGravity {
+        get { return self.contentsGravity  }
+        set { self.contentsGravity = newValue }
+    }
+
+    @available(iOS 4.0, *)
+    var zz_contentsScale: CGFloat {
+        get { return self.contentsScale  }
+        set { self.contentsScale = newValue }
+    }
+
+    var zz_contentsCenter: CGRect {
+        get { return self.contentsCenter  }
+        set { self.contentsCenter = newValue }
+    }
+
+    @available(iOS 10.0, *)
+    var zz_contentsFormat: CALayerContentsFormat {
+        get { return self.contentsFormat  }
+        set { self.contentsFormat = newValue }
+    }
+
+    @available(iOS 17.0, *)
+    var zz_wantsExtendedDynamicRangeContent: Bool {
+        get { return self.wantsExtendedDynamicRangeContent  }
+        set { self.wantsExtendedDynamicRangeContent = newValue }
+    }
+
+    var zz_minificationFilter: CALayerContentsFilter {
+        get { return self.minificationFilter  }
+        set { self.minificationFilter = newValue }
+    }
+
+    var zz_magnificationFilter: CALayerContentsFilter {
+        get { return self.magnificationFilter  }
+        set { self.magnificationFilter = newValue }
+    }
+
+    var zz_minificationFilterBias: Float {
+        get { return self.minificationFilterBias  }
+        set { self.minificationFilterBias = newValue }
+    }
+
+    var zz_isOpaque: Bool {
+        get { return self.isOpaque  }
+        set { self.isOpaque = newValue }
+    }
+
+    var zz_needsDisplayOnBoundsChange: Bool {
+        get { return self.needsDisplayOnBoundsChange  }
+        set { self.needsDisplayOnBoundsChange = newValue }
+    }
+
+    @available(iOS 6.0, *)
+    var zz_drawsAsynchronously: Bool {
+        get { return self.drawsAsynchronously  }
+        set { self.drawsAsynchronously = newValue }
+    }
+
+    var zz_edgeAntialiasingMask: CAEdgeAntialiasingMask {
+        get { return self.edgeAntialiasingMask  }
+        set { self.edgeAntialiasingMask = newValue }
+    }
+
+    @available(iOS 6.0, *)
+    var zz_allowsEdgeAntialiasing: Bool {
+        get { return self.allowsEdgeAntialiasing  }
+        set { self.allowsEdgeAntialiasing = newValue }
+    }
+
+    var zz_backgroundColor: CGColor? {
+        get { return self.backgroundColor  }
+        set { self.backgroundColor = newValue }
+    }
+
+    var zz_cornerRadius: CGFloat {
+        get { return self.cornerRadius  }
+        set { self.cornerRadius = newValue }
+    }
+
+    @available(iOS 11.0, *)
+    var zz_maskedCorners: CACornerMask {
+        get { return self.maskedCorners  }
+        set { self.maskedCorners = newValue }
+    }
+
+    @available(iOS 13.0, *)
+    var zz_cornerCurve: CALayerCornerCurve {
+        get { return self.cornerCurve }
+        set { self.cornerCurve = newValue }
+    }
+
+    var zz_borderWidth: CGFloat {
+        get { return self.borderWidth  }
+        set { self.borderWidth = newValue }
+    }
+
+    var zz_borderColor: CGColor? {
+        get { return self.borderColor  }
+        set { self.borderColor = newValue }
+    }
+
+    var zz_opacity: Float {
+        get { return self.opacity  }
+        set { self.opacity = newValue }
+    }
+
+    @available(iOS 2.0, *)
+    var zz_allowsGroupOpacity: Bool {
+        get { return self.allowsGroupOpacity  }
+        set { self.allowsGroupOpacity = newValue }
+    }
+
+    var zz_compositingFilter: Any? {
+        get { return self.compositingFilter  }
+        set { self.compositingFilter = newValue }
+    }
+
+    var zz_filters: [Any]? {
+        get { return self.filters  }
+        set { self.filters = newValue }
+    }
+
+    var zz_backgroundFilters: [Any]? {
+        get { return self.backgroundFilters  }
+        set { self.backgroundFilters = newValue }
+    }
+
+    var zz_shouldRasterize: Bool {
+        get { return self.shouldRasterize  }
+        set { self.shouldRasterize = newValue }
+    }
+
+    var zz_rasterizationScale: CGFloat {
+        get { return self.rasterizationScale  }
+        set { self.rasterizationScale = newValue }
+    }
+
+    var zz_shadowColor: CGColor? {
+        get { return self.shadowColor  }
+        set { self.shadowColor = newValue }
+    }
+
+    var zz_shadowOffset: CGSize {
+        get { return self.shadowOffset  }
+        set { self.shadowOffset = newValue }
+    }
+
+    var zz_shadowRadius: CGFloat {
+        get { return self.shadowRadius  }
+        set { self.shadowRadius = newValue }
+    }
+
+    var zz_shadowPath: CGPath? {
+        get { return self.shadowPath  }
+        set { self.shadowPath = newValue }
+    }
+
+    var zz_name: String? {
+        get { return self.name  }
+        set { self.name = newValue }
+    }
+
+    var zz_style: [AnyHashable : Any]? {
+        get { return self.style  }
+        set { self.style = newValue }
+    }
+}
+
+public extension CALayer{
+    @discardableResult func zz_position(_ value: CGPoint) -> Self{
+        zz_position = value
+        return self
+    }
+
+    @discardableResult func zz_zPosition(_ value: CGFloat) -> Self{
+        zz_zPosition = value
+        return self
+    }
+
+    @discardableResult func zz_anchorPoint(_ value: CGPoint) -> Self{
+        zz_anchorPoint = value
+        return self
+    }
+
+    @discardableResult func zz_anchorPointZ(_ value: CGFloat) -> Self{
+        zz_anchorPointZ = value
+        return self
+    }
+
+    @discardableResult func zz_transform(_ value: CATransform3D) -> Self{
+        zz_transform = value
+        return self
+    }
+
+    @discardableResult func zz_isHidden(_ value: Bool) -> Self{
+        zz_isHidden = value
+        return self
+    }
+
+    @discardableResult func zz_isDoubleSided(_ value: Bool) -> Self{
+        zz_isDoubleSided = value
+        return self
+    }
+
+    @discardableResult func zz_isGeometryFlipped(_ value: Bool) -> Self{
+        zz_isGeometryFlipped = value
+        return self
+    }
+
+    @discardableResult func zz_sublayerTransform(_ value: CATransform3D) -> Self{
+        zz_sublayerTransform = value
+        return self
+    }
+
+    @discardableResult func zz_mask(_ value: CALayer?) -> Self{
+        zz_mask = value
+        return self
+    }
+
+    @discardableResult func zz_masksToBounds(_ value: Bool) -> Self{
+        zz_masksToBounds = value
+        return self
+    }
+
+    @discardableResult func zz_contents(_ value: Any?) -> Self{
+        zz_contents = value
+        return self
+    }
+
+    @discardableResult func zz_contentsRect(_ value: CGRect) -> Self{
+        zz_contentsRect = value
+        return self
+    }
+
+    @discardableResult func zz_contentsGravity(_ value: CALayerContentsGravity) -> Self{
+        zz_contentsGravity = value
+        return self
+    }
+
+    @available(iOS 4.0, *)
+    @discardableResult func zz_contentsScale(_ value: CGFloat) -> Self{
+        zz_contentsScale = value
+        return self
+    }
+
+    @discardableResult func zz_contentsCenter(_ value: CGRect) -> Self{
+        zz_contentsCenter = value
+        return self
+    }
+
+    @available(iOS 10.0, *)
+    @discardableResult func zz_contentsFormat(_ value: CALayerContentsFormat) -> Self{
+        zz_contentsFormat = value
+        return self
+    }
+
+    @available(iOS 17.0, *)
+    @discardableResult func zz_wantsExtendedDynamicRangeContent(_ value: Bool) -> Self{
+        zz_wantsExtendedDynamicRangeContent = value
+        return self
+    }
+
+    @discardableResult func zz_minificationFilter(_ value: CALayerContentsFilter) -> Self{
+        zz_minificationFilter = value
+        return self
+    }
+
+    @discardableResult func zz_magnificationFilter(_ value: CALayerContentsFilter) -> Self{
+        zz_magnificationFilter = value
+        return self
+    }
+
+    @discardableResult func zz_minificationFilterBias(_ value: Float) -> Self{
+        zz_minificationFilterBias = value
+        return self
+    }
+
+    @discardableResult func zz_isOpaque(_ value: Bool) -> Self{
+        zz_isOpaque = value
+        return self
+    }
+
+    @discardableResult func zz_needsDisplayOnBoundsChange(_ value: Bool) -> Self{
+        zz_needsDisplayOnBoundsChange = value
+        return self
+    }
+
+    @available(iOS 6.0, *)
+    @discardableResult func zz_drawsAsynchronously(_ value: Bool) -> Self{
+        zz_drawsAsynchronously = value
+        return self
+    }
+
+    @discardableResult func zz_edgeAntialiasingMask(_ value: CAEdgeAntialiasingMask) -> Self{
+        zz_edgeAntialiasingMask = value
+        return self
+    }
+
+    @available(iOS 6.0, *)
+    @discardableResult func zz_allowsEdgeAntialiasing(_ value: Bool) -> Self{
+        zz_allowsEdgeAntialiasing = value
+        return self
+    }
+
+    @discardableResult func zz_backgroundColor(_ value: CGColor?) -> Self{
+        zz_backgroundColor = value
+        return self
+    }
+
+    @discardableResult func zz_cornerRadius(_ value: CGFloat) -> Self{
+        zz_cornerRadius = value
+        return self
+    }
+
+    @available(iOS 11.0, *)
+    @discardableResult func zz_maskedCorners(_ value: CACornerMask) -> Self{
+        zz_maskedCorners = value
+        return self
+    }
+
+    @available(iOS 13.0, *)
+    @discardableResult func zz_cornerCurve(_ value: CALayerCornerCurve) -> Self{
+        zz_cornerCurve = value
+        return self
+    }
+
+    @discardableResult func zz_borderWidth(_ value: CGFloat) -> Self{
+        zz_borderWidth = value
+        return self
+    }
+
+    @discardableResult func zz_borderColor(_ value: CGColor?) -> Self{
+        zz_borderColor = value
+        return self
+    }
+
+    @discardableResult func zz_opacity(_ value: Float) -> Self{
+        zz_opacity = value
+        return self
+    }
+
+    @available(iOS 2.0, *)
+    @discardableResult func zz_allowsGroupOpacity(_ value: Bool) -> Self{
+        zz_allowsGroupOpacity = value
+        return self
+    }
+
+    @discardableResult func zz_compositingFilter(_ value: Any?) -> Self{
+        zz_compositingFilter = value
+        return self
+    }
+
+    @discardableResult func zz_filters(_ value: [Any]?) -> Self{
+        zz_filters = value
+        return self
+    }
+
+    @discardableResult func zz_backgroundFilters(_ value: [Any]?) -> Self{
+        zz_backgroundFilters = value
+        return self
+    }
+
+    @discardableResult func zz_shouldRasterize(_ value: Bool) -> Self{
+        zz_shouldRasterize = value
+        return self
+    }
+
+    @discardableResult func zz_rasterizationScale(_ value: CGFloat) -> Self{
+        zz_rasterizationScale = value
+        return self
+    }
+
+    @discardableResult func zz_shadowColor(_ value: CGColor?) -> Self{
+        zz_shadowColor = value
+        return self
+    }
+
+    @discardableResult func zz_shadowOffset(_ value: CGSize) -> Self{
+        zz_shadowOffset = value
+        return self
+    }
+
+    @discardableResult func zz_shadowRadius(_ value: CGFloat) -> Self{
+        zz_shadowRadius = value
+        return self
+    }
+
+    @discardableResult func zz_shadowPath(_ value: CGPath?) -> Self{
+        zz_shadowPath = value
+        return self
+    }
+
+    @discardableResult func zz_name(_ value: String?) -> Self{
+        zz_name = value
+        return self
+    }
+
+    @discardableResult func zz_style(_ value: [AnyHashable : Any]?) -> Self{
+        zz_style = value
         return self
     }
 }

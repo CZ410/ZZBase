@@ -528,6 +528,11 @@ public extension UIView{
         }
     }
     
+    @discardableResult func zz_gradientLayer(_ block:@escaping (CAGradientLayer?) -> ()) -> Self{
+        block(self.gradientLayer)
+        return self
+    }
+
     ///  移除渐变层
     func zz_removeGradient(){
         self.zz_removeObservers(["frame","bounds"], key: "gradientLayer")
@@ -541,7 +546,7 @@ public extension UIView{
     ///   - startPoint: 开始位置x,y 在 0～1 之间
     ///   - endPoint: 结束位置x,y  在 0～1 之间
     ///   - locations: 渐变不同颜色位置 对应颜色组 0～1之间
-    @discardableResult func zz_addGradient(colors: [Any]?, start startPoint: CGPoint = CGPoint(x: 0, y: 0.5), end endPoint:CGPoint = CGPoint(x: 1, y: 0.5), locations: [NSNumber] = [0, 1]) -> CAGradientLayer{
+    @discardableResult func zz_addGradient(colors: [Any]?, start startPoint: CGPoint = CGPoint(x: 0, y: 0.5), end endPoint:CGPoint = CGPoint(x: 1, y: 0.5), locations: [NSNumber] = [0, 1]) -> Self{
         if self.gradientLayer == nil {
             self.gradientLayer = CAGradientLayer()
             self.gradientLayer?.frame = self.bounds
@@ -565,7 +570,7 @@ public extension UIView{
         self.gradientLayer?.endPoint = endPoint
         self.layer.insertSublayer(self.gradientLayer!, at: 0)
 
-        return self.gradientLayer!
+        return self
     }
 
     
@@ -576,7 +581,7 @@ public extension UIView{
     ///   - startPoint: 开始位置x,y 在 0～1 之间
     ///   - endPoint: 结束位置x,y  在 0～1 之间
     ///   - locations: 渐变不同颜色位置 对应颜色组 0～1之间
-    @discardableResult func zz_addGradient(form fColor: UIColor,to toColor: UIColor,start startPoint: CGPoint = CGPoint(x: 0, y: 0.5), end endPoint:CGPoint = CGPoint(x: 1, y: 0.5), locations: [NSNumber] = [0, 1]) -> CAGradientLayer{
+    @discardableResult func zz_addGradient(form fColor: UIColor,to toColor: UIColor,start startPoint: CGPoint = CGPoint(x: 0, y: 0.5), end endPoint:CGPoint = CGPoint(x: 1, y: 0.5), locations: [NSNumber] = [0, 1]) -> Self{
         return zz_addGradient(colors: [fColor.cgColor,toColor.cgColor],start: startPoint, end: endPoint, locations: locations)
     }
 }
@@ -592,6 +597,18 @@ public extension UIView{
         }
     }
 
+    @discardableResult func zz_shadowBgLayer(_ block:@escaping (CAShapeLayer?) -> ()) -> Self{
+        block(self.zz_shadowBgLayer)
+        return self
+    }
+
+    ///  移除阴影层
+    func zz_removeShadowBgLayer(){
+        self.zz_removeObservers(["frame","bounds"], key: "zz_shadow_BgLayer")
+        self.gradientLayer?.removeFromSuperlayer()
+        gradientLayer = nil
+    }
+
     @discardableResult func zz_shadow(color: UIColor = .gray,
                                       opacity: Float = 1,
                                       radius: CGFloat = 0,
@@ -599,16 +616,6 @@ public extension UIView{
                                       inset: UIEdgeInsets = .zero,
                                       corners: UIRectCorner = .allCorners,
                                       bgColor: UIColor? = nil) -> Self{
-        if zz_shadowBgLayer == nil {
-            zz_shadowBgLayer = CAShapeLayer()
-            zz_shadowBgLayer?.backgroundColor = UIColor.clear.cgColor
-            zz_shadowBgLayer?.strokeColor = UIColor.clear.cgColor
-        }
-        zz_shadowBgLayer?.fillColor = bgColor?.cgColor
-
-        if let bgLayer = zz_shadowBgLayer {
-            self.layer.insertSublayer(bgLayer, at: 0)
-        }
 
         func reloadShadow(){
             var frame = self.bounds
@@ -623,17 +630,22 @@ public extension UIView{
             self.zz_shadowBgLayer?.path = bgP.cgPath
         }
 
+        if zz_shadowBgLayer == nil {
+            zz_shadowBgLayer = CAShapeLayer()
+            zz_shadowBgLayer?.backgroundColor = UIColor.clear.cgColor
+            zz_shadowBgLayer?.strokeColor = UIColor.clear.cgColor
+
+            self.zz_addObservers(["frame", "bounds"], key: "zz_shadow_BgLayer") { [weak self] value in
+                guard let `self` = self, self.zz_width > 0, self.zz_height > 0 else { return }
+                reloadShadow()
+            }
+        }
+        zz_shadowBgLayer?.fillColor = bgColor?.cgColor
+
+        self.layer.insertSublayer(zz_shadowBgLayer!, at: 0)
+
         reloadShadow()
 
-        var targets = self.zz_observerTargets["frame"]
-        let targets2 = self.zz_observerTargets["bounds"]
-        targets?.remoBlock(for: "zz_shadow_BgLayer")
-        targets2?.remoBlock(for: "zz_shadow_BgLayer")
-
-        self.zz_addObservers(["frame", "bounds"], key: "zz_shadow_BgLayer") { [weak self] value in
-            guard let `self` = self, self.zz_width > 0, self.zz_height > 0 else { return }
-            reloadShadow()
-        }
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOpacity = opacity
 //        self.layer.cornerRadius = radius
@@ -672,7 +684,12 @@ public extension UIView{
             return zz_objc_get(key: "roundCornerLayer", CAShapeLayer.self)
         }
     }
-    
+
+    @discardableResult func zz_roundLayer(_ block:@escaping (CAShapeLayer?) -> ()) -> Self{
+        block(self.roundCornerLayer)
+        return self
+    }
+
     @discardableResult func zz_removeRound() -> Self{
         self.zz_removeObservers(["frame","bounds"], key: "roundCornerLayer")
         self.roundCornerLayer?.removeFromSuperlayer()

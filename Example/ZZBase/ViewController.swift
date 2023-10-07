@@ -71,22 +71,30 @@ class ViewController: UIViewController {
 
         let button = UIButton().zz_backgroundColor(.yellow)
         button.zz_hitEdgeInset(.zz_all(10))
-        button.frame = .zz_only(x:10, y: 100, width: 100, height: 100)
+        button.frame = .zz_only(x:50, y: 100, width: 100, height: 100)
         view.addSubview(button)
 
 //        button.zz_dottedBorder(corners: .allCorners, radii: 10, color: .black, lineDashPattern: [5, 2])
 
 //        button.zz_addGradient(form: .orange, to: .blue)
 //
-//        button.zz_addGradient(form: .systemPink, to: .systemTeal)
+        button.zz_addGradient(form: .systemPink, to: .systemTeal)
+            .zz_gradientLayer({$0?.zz_cornerRadius(10).zz_masksToBounds(true)})
 
-        button.zz_shadow(color: .blue, radius: 10, bgColor: .white).zz_backgroundColor(.clear)
+        button.zz_shadow(color: .blue, 
+                         radius: 10,
+                         bgColor: .white)
+
+
+//        button.zz_round(.allCorners, radii: 15)
 
         button.zz_addBlock(for: .touchUpInside) { sender in
-            if button.zz_width < 300 {
-                button.zz_width += 10
-            }else {
-                button.zz_width -= 10
+            UIView.performWithoutAnimation {
+                if button.zz_width < 300 {
+                    button.zz_width += 10
+                }else {
+                    button.zz_width -= 10
+                }
             }
         }
     }
