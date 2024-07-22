@@ -8,6 +8,7 @@
 
 import UIKit
 import ZZBase
+import SwiftUI
 
 class ViewController: UIViewController {
 
@@ -17,7 +18,14 @@ class ViewController: UIViewController {
 //        self.view
 //            .zz_backgroundColor(.red)
 //            .zz_alpha(0.5)
-        
+
+        let tab = UITableView
+            .zz_make(delegate: self, registerCells: [UITableViewCell.self])
+            .zz_dataSource(self)
+            .zz_separatorColor(.red)
+            .zz_separatorInset(.zero)
+            .zz_separatorStyle(.none)
+
         ZZLog(zz_file_bundle("testImgage", type: "png"))
         ZZLog(zz_file_documents("123.png"))
         
@@ -106,3 +114,20 @@ class ViewController: UIViewController {
 
 }
 
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource{
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+
+        return tableView.zz_cell()
+    }
+
+}
