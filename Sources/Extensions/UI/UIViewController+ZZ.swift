@@ -9,6 +9,60 @@ import Foundation
 import UIKit
 
 public extension UIViewController{
+    /// NavigationController backgroundEffect
+    var zz_navBarBgEffect: UIBlurEffect? {
+        get {
+            if #available(iOS 13.0, *) {
+                if let standardAppearance = self.navigationController?.navigationBar.standardAppearance{
+                    return standardAppearance.backgroundEffect
+                }
+            }
+            return nil
+        }
+        set {
+            if #available(iOS 13.0, *) {
+                if let standardAppearance = self.navigationController?.navigationBar.standardAppearance.copy(){
+                    standardAppearance.backgroundEffect = newValue
+                    self.navigationController?.navigationBar.standardAppearance = standardAppearance
+                    self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+                }
+            }
+        }
+    }
+    
+    /// Set NavigationController backgroundEffect
+    @discardableResult func zz_navBarBgEffect(_ effect: UIBlurEffect?) -> Self{
+        self.zz_navBarBgEffect = effect
+        return self
+    }
+    
+    /// NavigationController backgroundColor
+    var zz_navBarBgColor: UIColor? {
+        get {
+            if #available(iOS 15.0, *) {
+                if let standardAppearance = self.navigationController?.navigationBar.standardAppearance{
+                    return standardAppearance.backgroundColor
+                }
+            }
+            return self.navigationController?.navigationBar.backgroundColor
+        }
+        set {
+            self.navigationController?.navigationBar.backgroundColor = newValue
+            if #available(iOS 15.0, *) {
+                if let standardAppearance = self.navigationController?.navigationBar.standardAppearance.copy(){
+                    standardAppearance.backgroundColor = newValue
+                    self.navigationController?.navigationBar.standardAppearance = standardAppearance
+                    self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+                }
+            }
+        }
+    }
+    
+    /// Set NavigationController backgroundColor
+    @discardableResult func zz_navBarBgColor(_ color: UIColor?) -> Self{
+        self.zz_navBarBgColor = color
+        return self
+    }
     
     /// NavigationController BackgroundImage
     var zz_navBarBgImg: UIImage? {
