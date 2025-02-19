@@ -190,9 +190,9 @@ public extension UIViewController{
 }
 
 public extension UIViewController{
-    func zz_push(viewCtrl:UIViewController) {
+    func zz_push(viewCtrl:UIViewController, animation: Bool = true) {
         viewCtrl.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(viewCtrl, animated: true)
+        self.navigationController?.pushViewController(viewCtrl, animated: animation)
     }
     
     func zz_pop(afterTime: Double = 0, animation: Bool = true) -> Void {
