@@ -70,7 +70,11 @@ public extension UIDevice{
     
     /// 是否是模拟器
     static var zz_isSimuLator: Bool{
-        return (TARGET_IPHONE_SIMULATOR == 1 && TARGET_OS_IPHONE == 1)
+#if targetEnvironment(simulator)
+        return true
+#else
+        return false
+#endif
     }
 }
 
