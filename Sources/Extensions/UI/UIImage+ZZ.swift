@@ -9,10 +9,29 @@ import Foundation
 import UIKit
 import CoreImage
 
+// MARK: - 处理图片名为 nil 的时候
+public extension UIImage{
+    class func zz_initializeMethod(){
+        guard let imageNamed = class_getClassMethod(self, #selector(UIImage.init(named:))) ,
+              let hookImageNamed = class_getClassMethod(self, #selector(UIImage.hook_init(named:))) else {
+            return
+        }
+        method_exchangeImplementations(imageNamed, hookImageNamed)
+    }
+    
+    @objc private static func hook_init(named: String) -> UIImage?{
+        guard !named.isEmpty else {
+            return nil
+        }
+        return .init(named: named, in: nil, compatibleWith: nil)
+    }
+}
+
+
 public extension UIImage{
     
     /// 不透明度
-    var opaque: Bool {
+    var zz_opaque: Bool {
         get {
             let alphaInfo = self.cgImage?.alphaInfo
             let opaque = alphaInfo == .noneSkipLast ||
@@ -27,7 +46,7 @@ public extension UIImage{
         return UIImage(named: name)
     }
 
-    var base64: String?{
+    var zz_base64: String?{
         let data = self.pngData()
         return data?.base64EncodedString()
     }
@@ -199,7 +218,7 @@ public extension UIImage{
     /// - Parameter reSize: 目标大小
     /// - Returns: 图片
     func zz_resize(_ reSize:CGSize) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(reSize, self.opaque, self.scale)
+        UIGraphicsBeginImageContextWithOptions(reSize, self.zz_opaque, self.scale)
         self.draw(in: CGRect(origin: .zero, size: reSize))
         let reSizeImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -210,7 +229,7 @@ public extension UIImage{
     /// - Parameter rect: 大小
     /// - Returns: 图片
     func zz_cropping(in rect: CGRect) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(rect.size, self.opaque, self.scale)
+        UIGraphicsBeginImageContextWithOptions(rect.size, self.zz_opaque, self.scale)
         self.draw(in: CGRect(x: -rect.origin.x, y: -rect.origin.y, width: self.size.width, height: self.size.height))
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

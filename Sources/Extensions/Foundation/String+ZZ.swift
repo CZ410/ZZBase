@@ -165,7 +165,8 @@ public extension String{
          虚拟运营商号段
          162 165 170 171
         */
-        let phoneRegex = "^1(3[0-9]|4[0,5,6,7,9]|5[^4,\\D]|6[2,5,6,7]|7[^4,\\D]|8[0-9]|9[1,2,5,8,9])\\d{8}"
+//        let phoneRegex = "^1(3[0-9]|4[0,5,6,7,9]|5[^4,\\D]|6[2,5,6,7]|7[^4,\\D]|8[0-9]|9[1,2,5,8,9])\\d{8}"
+        let phoneRegex = "^1\\d{10}"
         let phonePredicate = NSPredicate.init(format: "SELF MATCHES %@", phoneRegex)
         return phonePredicate.evaluate(with: self)
     }
@@ -321,6 +322,51 @@ public extension String{
     var zz_isURL:Bool {
         let url = URL(string: self)
         return url != nil
+    }
+    
+    /// 版本号比对 当相同时候也返回 true
+    func zz_Lager(than version: String) -> Bool{
+        return zz_Lager(version: version) != .orderedAscending
+    }
+    
+    /// 版本号比对
+    func zz_Lager(version: String) -> ComparisonResult{
+        if (isEmpty) {
+            /// 当前版本是空 直接返回false
+            return .orderedAscending
+        }
+        
+        if (version.isEmpty) {
+            /// 新版本是空 直接返回true
+            return .orderedDescending
+        }
+        
+        let currentVersion = self;
+        // 假设有一个新的版本号 "2.0.0" 需要与当前版本号比较
+        let newVersion = version;
+        
+        // 将版本号字符串转换为数字数组
+        let currentVersionParts = currentVersion.components(separatedBy: ".").compactMap({Int($0)})
+        let newVersionParts = newVersion.components(separatedBy: ".").compactMap({Int($0)})
+        
+        for i in 0 ..< currentVersionParts.count {
+            if (i >= newVersionParts.count) {
+                // 新版本号短于当前版本号，当前版本号更大
+                return .orderedDescending
+            }
+            if (currentVersionParts[i] > newVersionParts[i]) {
+                // 当前版本号的这一部分更大
+                return .orderedDescending
+            } else if (currentVersionParts[i] < newVersionParts[i]) {
+                // 新版本号的这一部分更大
+                return .orderedAscending
+            } else if (i == currentVersionParts.count - 1 && currentVersionParts.count == newVersionParts.count) {
+                // 版本号长度相同且全部部分都相同
+                return .orderedSame
+            }
+        }
+        
+        return .orderedAscending
     }
 }
 

@@ -102,17 +102,7 @@ public func zz_url(file string:String?) -> URL? {
 
 //MARK: - LOG
 public func ZZLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line) {
-    #if DEBUG
-    // 设置在DEBUG 环境下打印LOG ， DEBUG就是在Build Settings 里面设置的标识。
-    // 1.获取打印所在的文件
-    let file = (file as NSString).lastPathComponent
-//    //2.获取打印所在的方法
-//    let funcName = funcName
-    //3.获取打印所在的行
-    let lineNum = lineNum
-//    print("\(file) (\(lineNum)) \(funcName) : \(message)")
-    print("\(file) (\(lineNum)): \(message)")
-    #endif
+    ZZLogger.msg(message, file: file, funcName: funcName, lineNum: lineNum)
 }
 
 public class ZZBase{

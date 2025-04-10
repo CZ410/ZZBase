@@ -81,6 +81,10 @@ public extension UIEdgeInsets{
     static func zz_only(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0)  -> UIEdgeInsets{
         return UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
     }
+    
+    func zz_copy(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil) -> UIEdgeInsets{
+        return UIEdgeInsets(top: top ?? self.top, left: left ?? self.left, bottom: bottom ?? self.bottom, right: right ?? self.right)
+    }
 }
 
 public extension UIEdgeInsets{

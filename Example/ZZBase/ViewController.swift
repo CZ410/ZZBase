@@ -11,6 +11,9 @@ import ZZBase
 import SwiftUI
 
 class ViewController: UIViewController {
+    
+    @ZZUserDefaults(key: "ViewController_Name", defaultValue: "")
+    static var name: String
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +21,23 @@ class ViewController: UIViewController {
 //        self.view
 //            .zz_backgroundColor(.red)
 //            .zz_alpha(0.5)
-
+        
+//        self.view.zz.borderColor(.black).borderWidth(1).borderWidth = 1
+//        
+//       let 的 = UserDefaults.object(forKey: "")
+        
+        ZZLogger.info("jfdlaf")
+        
+        UIImage.zz_initializeMethod()
+        
+        
+        let _ = UIEdgeInsets().zz_copy(top: 100)
+        
+        UIButton().zz_hitEdgeInset(.zz_all(-10))
+        
+        let d = "".zz_Lager(version: "")
+        UIStackView.zz_h([], alignment: .center, distribution: .equalSpacing, spacing: 10)
+        
         let tab = UITableView
             .zz_make(delegate: self, registerCells: [UITableViewCell.self])
             .zz_dataSource(self)
@@ -79,7 +98,7 @@ class ViewController: UIViewController {
 
         let button = UIButton().zz_backgroundColor(.yellow)
         button.zz_hitEdgeInset(.zz_all(10))
-        button.frame = .zz_only(x:50, y: 100, width: 100, height: 100)
+        button.frame = .zz_only(x:50, y: 100, width: 300, height: 300)
         view.addSubview(button)
 
 //        button.zz_dottedBorder(corners: .allCorners, radii: 10, color: .black, lineDashPattern: [5, 2])
@@ -89,22 +108,47 @@ class ViewController: UIViewController {
         button.zz_addGradient(form: .systemPink, to: .systemTeal)
             .zz_gradientLayer({$0?.zz_cornerRadius(10).zz_masksToBounds(true)})
 
-        button.zz_shadow(color: .blue, 
+        button.zz_shadow(color: .orange,
                          radius: 10,
-                         bgColor: .white)
+                         bgColor: .red)
 
 
 //        button.zz_round(.allCorners, radii: 15)
 
         button.zz_addBlock(for: .touchUpInside) { sender in
             UIView.performWithoutAnimation {
-                if button.zz_width < 300 {
+                if button.zz_width < 350 {
                     button.zz_width += 10
                 }else {
                     button.zz_width -= 10
                 }
             }
         }
+        
+        
+        button.zz_addLine(alignment: .topLine, color: .purple)
+        button.zz_addLine(alignment: .leftLine, color: .purple)
+        button.zz_addLine(alignment: .rightLine, color: .purple)
+        button.zz_addLine(alignment: .bottomLine, color: .purple)
+        
+        button.zz_addLine(alignment: .centerLineX, color: .purple)
+        button.zz_addLine(alignment: .centerLineY, color: .purple)
+        
+        
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .top, color: .red)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .left, color: .yellow)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .bottom, color: .purple)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .right, color: .purple)
+        
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .center, color: .purple)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .topCenter, color: .purple)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .leftCenter, color: .purple)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .bottomCenter, color: .purple)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: .rightCenter, color: .purple)
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: [.bottom, .right], color: .purple)
+        
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: [.left, .right, .center], color: .orange , inset: .zz_all(20))
+        button.zz_addLine(CGSize(width: 10, height: 10), alignment: [.top, .bottom], color: .orange , inset: .zz_all(20))
     }
 
     override func didReceiveMemoryWarning() {

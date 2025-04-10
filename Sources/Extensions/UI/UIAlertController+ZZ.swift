@@ -100,6 +100,7 @@ public extension UIAlertController{
                          title:String?,
                          message:String?,
                          style:UIAlertController.Style,
+                         cancelTitle: String = "取消",
                          titleBlock:((_ obj:T) -> String?),
                          clickBlock:@escaping (_ alertAction:UIAlertAction,_ index:Int,_ obj:T) -> Void){
         var actions: [UIAlertAction] = []
@@ -111,7 +112,7 @@ public extension UIAlertController{
             }
             actions.append(alert)
         }
-        let cancelAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction.init(title: cancelTitle, style: .cancel, handler: nil)
         actions.append(cancelAction)
         self.show(actions: actions,
                   viewCtrl: viewCtrl,

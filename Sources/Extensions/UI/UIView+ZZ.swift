@@ -452,6 +452,16 @@ public extension UIView{
     }
 }
 
+// MARK: - 截图
+public extension UIView{
+    /// 截图
+    /// - Parameter frame: 坐标
+    /// - Returns: 截图的图片
+    func zz_snapshot(in frame: CGRect ) -> UIImage?{
+        return UIImage.zz_snapshot(self, in: frame)
+    }
+}
+
 //MARK: - UITapGestureRecognizer
 public extension UIView{
     class UIViewTapBlockTarget: NSObject {
@@ -588,69 +598,150 @@ public extension UIView{
 
 //MARK: - 阴影
 public extension UIView{
-    private(set) var zz_shadowBgLayer: CAShapeLayer?{
+    var zz_shadowColor: UIColor?{
         set{
-            zz_objc_set(key: "zz_shadowBgLayer", newValue)
+            zz_objc_set(key: "zz_shadowColor", newValue)
+            refreshShadow()
         }
         get{
-            return zz_objc_get(key: "zz_shadowBgLayer", CAShapeLayer.self)
+            return zz_objc_get(key: "zz_shadowColor", UIColor.self)
         }
     }
-
-    @discardableResult func zz_shadowBgLayer(_ block:@escaping (CAShapeLayer?) -> ()) -> Self{
-        block(self.zz_shadowBgLayer)
-        return self
-    }
-
-    ///  移除阴影层
-    func zz_removeShadowBgLayer(){
-        self.zz_removeObservers(["frame","bounds"], key: "zz_shadow_BgLayer")
-        self.gradientLayer?.removeFromSuperlayer()
-        gradientLayer = nil
-    }
-
-    @discardableResult func zz_shadow(color: UIColor = .gray,
-                                      opacity: Float = 1,
-                                      radius: CGFloat = 0,
-                                      offset: CGSize = .zero,
-                                      inset: UIEdgeInsets = .zero,
-                                      corners: UIRectCorner = .allCorners,
-                                      bgColor: UIColor? = nil) -> Self{
-
-        func reloadShadow(){
-            var frame = self.bounds
-            frame.zz_x += inset.left
-            frame.zz_y += inset.top
-            frame.zz_width -= (inset.left + inset.right)
-            frame.zz_height -= (inset.top + inset.bottom)
-            let p = UIBezierPath(roundedRect: frame, byRoundingCorners: corners, cornerRadii: CGSize(radius))
-            self.layer.shadowPath = p.cgPath
-
-            let bgP = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(radius))
-            self.zz_shadowBgLayer?.path = bgP.cgPath
+    
+    var zz_shadowOpacity: Float{
+        set{
+            zz_objc_set(key: "zz_shadowOpacity", newValue)
+            refreshShadow()
         }
-
-        if zz_shadowBgLayer == nil {
+        get{
+            return zz_objc_get(key: "zz_shadowOpacity", Float.self) ?? 1
+        }
+    }
+    
+    var zz_shadowRadius: CGFloat{
+        set{
+            zz_objc_set(key: "zz_shadowRadius", newValue)
+            refreshShadow()
+        }
+        get{
+            return zz_objc_get(key: "zz_shadowRadius", CGFloat.self) ?? 0
+        }
+    }
+    
+    var zz_shadowOffset: CGSize{
+        set{
+            zz_objc_set(key: "zz_shadowOffset", newValue)
+            refreshShadow()
+        }
+        get{
+            return zz_objc_get(key: "zz_shadowOffset", CGSize.self) ?? .zero
+        }
+    }
+    
+    var zz_shadowInset: UIEdgeInsets{
+        set{
+            zz_objc_set(key: "zz_shadowInset", newValue)
+            refreshShadow()
+        }
+        get{
+            return zz_objc_get(key: "zz_shadowInset", UIEdgeInsets.self) ?? .zero
+        }
+    }
+    
+    var zz_shadowCorners: UIRectCorner{
+        set{
+            zz_objc_set(key: "zz_shadowCorners", newValue)
+            refreshShadow()
+        }
+        get{
+            return zz_objc_get(key: "zz_shadowCorners", UIRectCorner.self) ?? .allCorners
+        }
+    }
+    
+    
+    private(set) var zz_shadowBgLayer: CAShapeLayer?{
+        set{
+            zz_objc_set(key: "shadowBgLayer", newValue)
+        }
+        get{
+            return zz_objc_get(key: "shadowBgLayer", CAShapeLayer.self)
+        }
+    }
+    
+    var zz_shadowBgColor: UIColor?{
+        set{
+            zz_objc_set(key: "zz_shadowBgColor", newValue)
+            refreshShadow()
+        }
+        get{
+            return zz_objc_get(key: "zz_shadowBgColor", UIColor.self)
+        }
+    }
+    
+    private func refreshShadow(){
+        guard let zz_shadowColor = self.zz_shadowColor else {
+            self.layer.shadowPath = nil
+            self.zz_remoAllObservers()
+            return
+        }
+        
+        
+        if let bgColor = zz_shadowBgColor, zz_shadowBgLayer == nil {
+            self.zz_backgroundColor(.clear)
             zz_shadowBgLayer = CAShapeLayer()
             zz_shadowBgLayer?.backgroundColor = UIColor.clear.cgColor
+            zz_shadowBgLayer?.fillColor = bgColor.cgColor
             zz_shadowBgLayer?.strokeColor = UIColor.clear.cgColor
-
-            self.zz_addObservers(["frame", "bounds"], key: "zz_shadow_BgLayer") { [weak self] value in
-                guard let `self` = self, self.zz_width > 0, self.zz_height > 0 else { return }
-                reloadShadow()
+        }else{
+            self.layer.cornerRadius = zz_shadowRadius
+        }
+        
+        if let bgLayer = zz_shadowBgLayer {
+            self.layer.insertSublayer(bgLayer, at: 0)
+        }
+        
+        self.zz_addObservers(["frame", "bounds"]) { [weak self] value in
+            guard let `self` = self, self.zz_width > 0, self.zz_height > 0 else { return }
+            var frame = self.bounds
+            frame.zz_x += self.zz_shadowInset.left
+            frame.zz_y += self.zz_shadowInset.top
+            frame.zz_width -= (self.zz_shadowInset.left + self.zz_shadowInset.right)
+            frame.zz_height -= (self.zz_shadowInset.top + self.zz_shadowInset.bottom)
+            
+            let p = UIBezierPath(roundedRect: frame, byRoundingCorners: self.zz_shadowCorners, cornerRadii: CGSize(self.zz_shadowRadius))
+            self.layer.shadowPath = p.cgPath
+            
+            if let bgLayer = zz_shadowBgLayer{
+                let bgP = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: self.zz_shadowCorners, cornerRadii: CGSize(self.zz_shadowRadius))
+                bgLayer.path = bgP.cgPath
             }
         }
-        zz_shadowBgLayer?.fillColor = bgColor?.cgColor
-
-        self.layer.insertSublayer(zz_shadowBgLayer!, at: 0)
-
-        reloadShadow()
-
-        self.layer.shadowColor = color.cgColor
-        self.layer.shadowOpacity = opacity
-//        self.layer.cornerRadius = radius
-        self.layer.shadowOffset = offset
-
+        self.layer.shadowColor = zz_shadowColor.cgColor
+        self.layer.shadowOpacity = zz_shadowOpacity
+        //        self.layer.cornerRadius = zz_shadowRadius
+        self.layer.shadowOffset = zz_shadowOffset
+    }
+    
+    
+    /// 添加阴影
+    /// - Parameters:
+    ///   - color: 阴影颜色
+    ///   - opacity: 阴影透明度 默认 1
+    ///   - radius: 阴影圆角 默认 0
+    ///   - offset: 阴影偏移量 默认 CGSize.zero
+    ///   - inset: 阴影的缩进量 默认 UIEdgeInsets.zero
+    ///   - corners: 阴影的圆角位置 默认UIRectCorner.allCorners
+    ///   - bgColor: 阴影的背景颜色
+    /// - Returns: 本体Self
+    @discardableResult
+    func zz_shadow(color: UIColor = .black, opacity: Float = 1, radius: CGFloat = 0, offset: CGSize = .zero, inset: UIEdgeInsets = .zero, corners: UIRectCorner = .allCorners, bgColor: UIColor? = nil) -> Self{
+        self.zz_shadowColor = color
+        self.zz_shadowOpacity = opacity
+        self.zz_shadowRadius = radius
+        self.zz_shadowOffset = offset
+        self.zz_shadowInset = inset
+        self.zz_shadowCorners = corners
+        self.zz_shadowBgColor = bgColor
         return self
     }
 }
@@ -737,9 +828,31 @@ public extension UIView{
 
 //MARK: - 分割线
 public extension UIView{
-    
-    enum UIViewLineAlignment : NSInteger {
-        case top, left, bottom, right
+    struct UIViewLineAlignment: OptionSet {
+        public var rawValue: UInt
+        
+        public init(rawValue: UInt) {
+            self.rawValue = rawValue
+        }
+        
+        public static let top = UIViewLineAlignment(rawValue: 1 << 0)
+        public static let left = UIViewLineAlignment(rawValue: 1 << 1)
+        public static let bottom = UIViewLineAlignment(rawValue: 1 << 2)
+        public static let right = UIViewLineAlignment(rawValue: 1 << 3)
+        public static let center = UIViewLineAlignment(rawValue: 1 << 4)
+        
+        public static let topCenter: UIViewLineAlignment = [.top, .center]
+        public static let leftCenter: UIViewLineAlignment = [.left, .center]
+        public static let bottomCenter: UIViewLineAlignment = [.bottom, .center]
+        public static let rightCenter: UIViewLineAlignment = [.right, .center]
+        
+        public static let topLine: UIViewLineAlignment = [.left, .right]
+        public static let leftLine: UIViewLineAlignment = [.top, .bottom]
+        public static let bottomLine: UIViewLineAlignment = [.left, .right, .bottom]
+        public static let rightLine: UIViewLineAlignment = [.right, .top, .bottom]
+        
+        public static let centerLineX: UIViewLineAlignment = [.top, .bottom, .center]
+        public static let centerLineY: UIViewLineAlignment = [.left, .right, .center]
     }
     
     /// 添加一根分割线
@@ -748,29 +861,48 @@ public extension UIView{
     ///   - alignment: 分割线对其父视图
     ///   - color: 颜色
     /// - Returns: 分割线
-    @discardableResult func zz_addLine(_ size: CGFloat, alignment: UIViewLineAlignment, color: UIColor, offset: CGFloat = 0) -> (superView: UIView, line: UIView){
+    @discardableResult func zz_addLine(_ size: CGSize = .zz_all(1), alignment: UIViewLineAlignment, color: UIColor, inset: UIEdgeInsets = .zero) -> (
+        superView: UIView,
+        line: UIView
+    ){
         let view = UIView().zz_backgroundColor(color)
         addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
-        switch alignment {
-            case .top, .bottom:
-                view.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-                view.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-                view.heightAnchor.constraint(equalToConstant: size).isActive = true
-                if alignment == .top{
-                    view.topAnchor.constraint(equalTo: self.topAnchor, constant: offset).isActive = true
-                } else{
-                    view.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: offset).isActive = true
-                }
-            case .left, .right:
-                view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-                view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-                view.widthAnchor.constraint(equalToConstant: size).isActive = true
-                if alignment == .left {
-                    view.leftAnchor.constraint(equalTo: self.leftAnchor, constant: offset).isActive = true
-                }else{
-                    view.rightAnchor.constraint(equalTo: self.rightAnchor, constant: offset).isActive = true
-                }
+        let w = view.widthAnchor.constraint(equalToConstant: size.width)
+        w.isActive = true
+        w.priority = .defaultLow
+        
+        let h = view.heightAnchor.constraint(equalToConstant: size.height)
+        h.isActive = true
+        h.priority = .defaultLow
+        
+        if alignment.contains(.top){
+            view.topAnchor.constraint(equalTo: self.topAnchor, constant: inset.top).isActive = true
+        }
+        
+        if alignment.contains(.left){
+            view.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset.left).isActive = true
+        }
+        
+        if alignment.contains(.bottom){
+            view.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset.bottom).isActive = true
+        }
+        
+        if alignment.contains(.right){
+            view.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -inset.right).isActive = true
+        }
+        
+        if (alignment.contains(.top) || alignment.contains(.bottom)) && alignment.contains(.center){
+            view.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        }
+        
+        if (alignment.contains(.left) || alignment.contains(.right)) && alignment.contains(.center){
+            view.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        }
+        
+        if alignment == .center {
+            view.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+            view.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
         return (self, view)
     }

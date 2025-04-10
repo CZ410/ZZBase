@@ -10,7 +10,7 @@ import Foundation
 
 public extension Dictionary{
     
-    mutating func zz_append(dic:Dictionary) -> Void {
+    mutating func zz_append(dic: [Key: Value]) -> Void {
         for (dicKey,dicValue) in dic {
             self[dicKey] = dicValue
         }
