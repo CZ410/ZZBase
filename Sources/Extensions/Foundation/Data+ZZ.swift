@@ -39,15 +39,15 @@ public extension Data{
     }
     
     var zz_md5: String{
-        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-        CC_MD5(bytes, CC_LONG(bytes.count - 1), &digest)
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        CC_SHA256(bytes, CC_LONG(bytes.count - 1), &digest)
         return digest.reduce("") { $0 + String(format:"%02X", $1) }
     }
     
     var zz_md5Data: Data{
-        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-        CC_MD5(bytes, CC_LONG(bytes.count - 1), &digest)
-        return Data(bytes: digest, count: Int(CC_MD5_DIGEST_LENGTH))
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        CC_SHA256(bytes, CC_LONG(bytes.count - 1), &digest)
+        return Data(bytes: digest, count: Int(CC_SHA256_DIGEST_LENGTH))
     }
     
     var zz_utf8Str: String{
