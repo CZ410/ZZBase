@@ -536,3 +536,24 @@ public extension String{
         return htmlString ?? NSMutableAttributedString(string: self)
     }
 }
+
+
+// MARK: - UI
+public extension String{
+    func zz_toLabel(_ font: UIFont? = nil) -> UILabel {
+        let label = UILabel().zz_text(self)
+        if let font = font {
+            label.zz_font(font)
+        }
+        return label
+    }
+    
+    func zz_toButton(_ type: UIButton.ButtonType = .custom, font: UIFont? = nil) -> UIButton {
+        let button = UIButton(type: type)
+        button.setTitle(self, for: .normal)
+        if let font = font {
+            button.titleLabel?.zz_font(font)
+        }
+        return button
+    }
+}

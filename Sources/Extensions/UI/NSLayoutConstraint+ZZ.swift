@@ -30,4 +30,10 @@ public extension NSLayoutConstraint {
         NSLayoutConstraint.activate([newConstraint])
         return newConstraint
     }
+    
+    @discardableResult
+    func zz_priority(_ value: UILayoutPriority) -> Self{
+        self.priority = value
+        return self
+    }
 }

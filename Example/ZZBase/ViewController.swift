@@ -10,13 +10,22 @@ import UIKit
 import ZZBase
 import SwiftUI
 
+
 class ViewController: UIViewController {
     
     @ZZUserDefaults(key: "ViewController_Name", defaultValue: "")
     static var name: String
+    
+    @ZZNotificationPost(name: "Test_Notification_Post")
+    var testCount: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(forName: $testCount.notificationName, object: self, queue: .main) { notification in
+            
+        }
+        
         // Do any additional setup after loading the view, typically from a nib.
 //        self.view
 //            .zz_backgroundColor(.red)
@@ -149,6 +158,70 @@ class ViewController: UIViewController {
         
         button.zz_addLine(CGSize(width: 10, height: 10), alignment: [.left, .right, .center], color: .orange , inset: .zz_all(20))
         button.zz_addLine(CGSize(width: 10, height: 10), alignment: [.top, .bottom], color: .orange , inset: .zz_all(20))
+        
+        let button2 = UIButton().zz_border(radius: 30)
+        view.zz_addSubViews([button2]) { superView in
+            [
+                button2.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10),
+//                button2.widthAnchor.constraint(equalToConstant: 200),
+                button2.heightAnchor.constraint(equalToConstant: 200),
+                button2.centerXAnchor.constraint(equalTo: superView.centerXAnchor)
+            ]
+        }
+        
+        button2
+            .zz_setTitle("123", for: .normal)
+            .zz_setImage(.zz_named("testImgage")?.zz_image(tintColor: .red), for: .normal)
+            .zz_setTitleColor(.red, for: .normal)
+            .zz_titleLabel(label: { $0?.zz_font(.systemFont(ofSize: 20, weight: .black)) })
+            .zz_setImageAlignment(.left, spacing: 0)
+
+        var num = 1
+        var spacing = 1
+        button2.zz_addBlock(for: .touchUpInside) { sender in
+            num = num + 1
+            spacing = spacing + 5
+            button2
+                .zz_setImageAlignment(.right, spacing: CGFloat(spacing))
+                .zz_setTitle("123+" + Array(repeating: "A", count: num), for: .normal)
+        }
+        
+        let testDate = Date.zz_date("2025-07-23 17:22:12", formatter: "yyyy-MM-dd HH:mm:ss")
+        
+        let offset1 = testDate?.zz_offset(.year, value: -1)
+        let offset2 = testDate?.zz_offset(.month, value: -1)
+        let offset3 = testDate?.zz_offset(.day, value: -1)
+        let offset4 = testDate?.zz_offset(.hour, value: -1)
+        let offset5 = testDate?.zz_offset(.minute, value: -1)
+        let offset6 = testDate?.zz_offset(.second, value: -1)
+        
+        let firstDay = testDate?.zz_firstdayOfMonth()
+        let lastDay = testDate?.zz_lastdayOfMonth()
+        let cusDay = testDate?.zz_month(day: 2)
+        let cusDay1 = testDate?.zz_month(day: 50)
+        let cusDay2 = testDate?.zz_month(day: -1)
+        
+        let formatter = "yyyy-MM-dd HH:mm:ss"
+        
+        ZZLog(testDate?.zz_dateString(formatter))
+        ZZLog(offset1?.zz_dateString(formatter))
+        ZZLog(offset2?.zz_dateString(formatter))
+        ZZLog(offset3?.zz_dateString(formatter))
+        ZZLog(offset4?.zz_dateString(formatter))
+        ZZLog(offset5?.zz_dateString(formatter))
+        ZZLog(offset6?.zz_dateString(formatter))
+        
+        ZZLog(firstDay?.zz_dateString(formatter))
+        ZZLog(lastDay?.zz_dateString(formatter))
+        ZZLog(cusDay?.zz_dateString(formatter))
+        ZZLog(cusDay1?.zz_dateString(formatter))
+        ZZLog(cusDay2?.zz_dateString(formatter))
+        
+        let value = [offset1, offset2, offset3, offset4, offset5, offset6, firstDay, lastDay]
+            .compactMap({ "\($0!.zz_dateString(formatter)) -- \($0!.zz_dateToRequiredTimeStr())" })
+        ZZLog(value)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

@@ -11,8 +11,14 @@ public extension Bundle{
     
     /// APP名字
     static var zz_bundleName: String {
-        let appversion = Bundle.main.infoDictionary?["CFBundleName"] as? String
-        return appversion ?? ""
+        if let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String {
+            return appName
+        }
+        // 如果CFBundleDisplayName未设置，则回退到CFBundleName
+        if let bundleName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
+            return bundleName
+        }
+        return ""
     }
     
     /// APP BundleIdentifier e.g. "com.ibireme.MyApp"
