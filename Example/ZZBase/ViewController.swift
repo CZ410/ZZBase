@@ -222,6 +222,8 @@ class ViewController: UIViewController {
         ZZLog(value)
         
         
+        let lable = "".zz_toLabel()
+        
     }
 
     override func didReceiveMemoryWarning() {

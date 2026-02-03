@@ -84,7 +84,20 @@ public extension ZZFile{
             return false
         }
     }
-    
+
+    static func createDirectory(to url: URL, intermediates: Bool = true, attributes: [FileAttributeKey: Any]? = nil, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool{
+        let isExists = self.exists(url: url, isDirectory: isDirectory)
+        /// 如果文件路径已经存在，就不在创建 直接返回
+        if isExists { return true }
+        let  fileManager = FileManager.default
+        do {
+            try fileManager.createDirectory(at: url, withIntermediateDirectories: intermediates, attributes: attributes)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     /// 创建一个文件，并自动创建文件夹路径。
     /// - 如果文件存在则更新，若文件不存在进行创建并写入。
     /// - Parameters:
@@ -113,6 +126,27 @@ public extension ZZFile{
         return fileManager.createFile(atPath: filePath, contents: contents, attributes: attributes)
     }
 
+    static func createFile(to url: URL, contents: Data? = nil, isUpdataData: Bool = true, attributes: [FileAttributeKey: Any]? = nil) -> Bool{
+        let isExists = self.exists(url: url)
+        /// 如果文件路径已经存在，就不在创建 直接返回
+        if isExists {
+            if let data = contents, isUpdataData {
+                return write(to: url, content: data)
+            }
+            return true
+        }
+        let filePath = url.zz_path()
+        guard let fileName = filePath.components(separatedBy: "/").last else {
+            return false
+        }
+        let directory = filePath.replacingOccurrences(of: fileName, with: "")
+        guard createDirectory(to: directory) else {
+            return false
+        }
+        let fileManager = FileManager.default
+        return fileManager.createFile(atPath: filePath, contents: contents, attributes: attributes)
+    }
+
     /// 写入文件
     /// - Parameters:
     ///   - filePath: 文件路径
@@ -121,6 +155,15 @@ public extension ZZFile{
     /// - Returns: 是否成功
     static func write(to filePath: String, content: Data, options: Data.WritingOptions = []) -> Bool {
         let url = URL(fileURLWithPath: filePath)
+        do {
+            try content.write(to: url, options: options)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    static func write(to url: URL, content: Data, options: Data.WritingOptions = []) -> Bool {
         do {
             try content.write(to: url, options: options)
             return true
@@ -141,12 +184,25 @@ public extension ZZFile{
         }
     }
 
+    static func read(_ url: URL) -> Data? {
+        return read(url.zz_path())
+    }
+
     /// 删除文件
     /// - Parameter filePath: 文件路径
     /// - Returns: 是否删除成功
     static func delete(_ filePath: String) -> Bool {
         do {
             try FileManager.default.removeItem(atPath: filePath)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    static func delete(_ url: URL) -> Bool {
+        do {
+            try FileManager.default.removeItem(at: url)
             return true
         } catch {
             return false
@@ -160,6 +216,10 @@ public extension ZZFile{
     /// - Returns: 是否重命名文件成功
     static func rename(from fromPath: String, to toPath: String) -> Bool {
         return move(from: fromPath, to: toPath)
+    }
+
+    static func rename(from fromURL: URL, to toURL: URL) -> Bool {
+        return move(from: fromURL, to: toURL)
     }
 
     /// 移动文件
@@ -176,6 +236,15 @@ public extension ZZFile{
         }
     }
 
+    static func move(from fromURL: URL, to toURL: URL) -> Bool {
+        do {
+            try FileManager.default.moveItem(at: fromURL, to: toURL)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     /// 拷贝文件
     /// - Parameters:
     ///   - fromPath: 文件原始路径
@@ -184,6 +253,15 @@ public extension ZZFile{
     static func copy(from fromPath: String, to toPath: String) -> Bool {
         do {
             try FileManager.default.copyItem(atPath: fromPath, toPath: toPath)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    static func copy(from fromURL: URL, to toURL: URL) -> Bool {
+        do {
+            try FileManager.default.copyItem(at: fromURL, to: toURL)
             return true
         } catch {
             return false
@@ -209,21 +287,18 @@ public extension ZZFile{
     /// - Parameter isDirectory: 该是为nil时候调用FileManager.default.fileExists(atPath: path)，否则调用FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
     /// - Returns: 是否存在
     static func exists(path: String, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool {
-        return isDirectory == nil ? FileManager.default.fileExists(atPath: path) : FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
+        if let dir = isDirectory{
+            return FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
+        }
+        return FileManager.default.fileExists(atPath: path)
     }
-    
+
     /// 文件是否存在
     /// - Parameter url: 文件路径
     /// - Parameter isDirectory: 该是为nil时候调用FileManager.default.fileExists(atPath: path)，否则调用FileManager.default.fileExists(atPath: path, isDirectory: isDirectory)
     /// - Returns: 是否存在
-    static func exists(url: URL, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool{
-        var path: String = ""
-        if #available(iOS 16.0, *) {
-            path = url.path()
-        } else {
-            path = url.path
-        }
-        return exists(path: path, isDirectory: isDirectory)
+    static func exists(url: URL, percentEncoded: Bool = true, isDirectory: UnsafeMutablePointer<ObjCBool>? = nil) -> Bool{
+        return exists(path: url.zz_path(percentEncoded: percentEncoded), isDirectory: isDirectory)
     }
     
     /// 获取文件列表
