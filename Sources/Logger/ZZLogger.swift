@@ -5,6 +5,8 @@
 //  Created by 陈钟 on 2025/4/9.
 //
 
+import Foundation
+
 public struct ZZLogger{
     public static func msg<T>(_ message: T, type: String? = nil, file:String = #file, funcName:String = #function,lineNum:Int = #line){
 #if DEBUG

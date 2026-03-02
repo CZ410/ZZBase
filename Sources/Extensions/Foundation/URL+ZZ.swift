@@ -6,6 +6,8 @@
 //
 
 import AVFoundation
+import Foundation
+
 public extension URL{
     func zz_path(percentEncoded: Bool = true) -> String{
         var path: String = ""

@@ -5,6 +5,8 @@
 //  Created by 陈钟 on 2025/4/9.
 //
 
+import Foundation
+
 @propertyWrapper
 public struct ZZUserDefaults<T> {
     public let key: String
