@@ -730,7 +730,7 @@ public extension UIView {
     private func refreshShadow() {
         guard let zz_shadowColor = zz_shadowColor else {
             layer.shadowPath = nil
-            zz_remoAllObservers()
+            zz_removeAllObservers()
             return
         }
 
