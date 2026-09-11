@@ -10,16 +10,29 @@ import UIKit
 
 /// Keywindow
 public var zz_keyWindow: UIWindow? {
+    let  application = UIApplication.shared
     if #available(iOS 13.0, *) {
-        guard let scene = UIApplication.shared.connectedScenes.first,
-              let sceneDelegate = scene.delegate as? UIWindowSceneDelegate,
-              let window = sceneDelegate.window else {
-            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-            return window
+        // 优先取前台活跃的 UIWindowScene
+        let activeScene = application.connectedScenes
+            .first { $0.activationState == .foregroundActive } as? UIWindowScene
+        
+        // 降级:取任意 UIWindowScene
+        let targetScene = activeScene
+        ?? application.connectedScenes.compactMap { $0 as? UIWindowScene }.first
+        
+        guard let scene = targetScene else { return nil }
+        
+        // iOS 15+ 有 keyWindow 属性
+        if #available(iOS 15.0, *) {
+            return scene.keyWindow
+            ?? scene.windows.first { $0.isKeyWindow }
+            ?? scene.windows.first
+        } else {
+            return scene.windows.first { $0.isKeyWindow }
+            ?? scene.windows.first
         }
-        return window
     } else {
-        return UIApplication.shared.keyWindow
+        return application.keyWindow
     }
 }
 
